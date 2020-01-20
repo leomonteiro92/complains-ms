@@ -16,7 +16,7 @@ let conn;
 let db;
 
 before(async () => {
-  conn = new MongoClient(process.env.DB_URL || 'mongodb://local:dev@127.0.0.1:27017', {
+  conn = new MongoClient(process.env.DB_URL || 'mongodb://127.0.0.1:27017', {
     useNewUrlParser: true,
     useUnifiedTopology: true
   });
