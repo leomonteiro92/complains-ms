@@ -1,10 +1,8 @@
-[![Build Status](https://travis-ci.org/leomonteiro92/complains-ms.svg?branch=master)](https://travis-ci.org/leomonteiro92/complains-ms)
-
-[![Coverage Status](https://coveralls.io/repos/leomonteiro92/complains-ms/badge.svg?branch=master)](https://coveralls.io/r/leomonteiro92/complains-ms?branch=master)
+[![Build Status](https://travis-ci.org/leomonteiro92/complains-ms.svg?branch=master)](https://travis-ci.org/leomonteiro92/complains-ms) [![Coverage Status](https://coveralls.io/repos/leomonteiro92/complains-ms/badge.svg?branch=master)](https://coveralls.io/r/leomonteiro92/complains-ms?branch=master)
 
 # Node.JS API
 
-API to manage users
+API to manage complains
 
 ## Requirements
 
