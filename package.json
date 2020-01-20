@@ -1,0 +1,38 @@
+{
+  "name": "complains-ms",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start:dev": "npx pm2 start app.js --watch --no-daemon",
+    "start": "npx pm2-runtime app.js",
+    "test": "npx nyc mocha **/*.spec.js --exit --timeout 9999",
+    "test:report": "npx nyc report --reporter=text-lcov | npx coveralls"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@hapi/joi": "^17.0.2",
+    "mongodb": "^3.5.1",
+    "pm2": "^4.2.1",
+    "restify": "^8.5.1"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.2.7",
+    "@types/faker": "^4.1.9",
+    "@types/hapi__joi": "^16.0.6",
+    "@types/mocha": "^5.2.7",
+    "@types/restify": "^8.4.2",
+    "@types/sinon": "^7.5.1",
+    "chai": "^4.2.0",
+    "coveralls": "^3.0.9",
+    "faker": "^4.1.0",
+    "mocha": "^7.0.0",
+    "nyc": "^15.0.0",
+    "sinon": "^8.1.0"
+  },
+  "nyc": {
+    "all": true
+  }
+}

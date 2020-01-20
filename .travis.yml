@@ -1,0 +1,17 @@
+language: node_js
+node_js:
+  - lts/erbium
+env:
+  - NODE_ENV=test
+  - DB_URL=travis:test@localhost:27017
+  - DB_NAME=complains-test
+
+services:
+  - mongodb
+
+before_script:
+  - sleep 15
+  - mongo mydb_test --eval 'db.createUser({user:"travis",pwd:"test",roles:["readWrite"]});'
+
+after_script:
+  - yarn run test:report

@@ -1,0 +1,11 @@
+version: '3.0'
+
+services:
+  db:
+    image: mongo
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: local
+      MONGO_INITDB_ROOT_PASSWORD: dev
+      MONGO_INITDB_DATABASE: complains-development
+    ports:
+      - 27017:27017
