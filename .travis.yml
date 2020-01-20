@@ -12,6 +12,4 @@ after_script:
   - yarn run test:report
 
 env:
-  - NODE_ENV=test
-  - DB_URL=127.0.0.1:27017
-  - DB_NAME=complains-test
+  - NODE_ENV=test DB_URL=127.0.0.1:27017 DB_NAME=complains-test
