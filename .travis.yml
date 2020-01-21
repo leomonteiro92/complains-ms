@@ -2,6 +2,7 @@ language: node_js
 node_js:
   - lts/erbium
 services:
+  - docker
   - mongodb
 before_script:
   - sleep 15
@@ -12,6 +13,8 @@ env:
     - NODE_ENV=test DB_URL=mongodb://127.0.0.1:27017 DB_NAME=complains-test
   global:
     secure: gvOWY2wVO3ng1yhcQ3FO75c7w6/pzb09Dczf0manRQPgGdFd58Haf7tEhxHfGEX2nsvpjd+KBByWjAvME/KrBVhLYuugcgCyZnXap+xBnnnCqiQw9yOSBzs9pztE9MPBuU6GoWHOaTpd+Wv+HLry2O5BeQd+1OiWAI+oBSEQZusP5W4MAgfhB/GL78N16hBuyAWHgnGbo63QUgSaoqLIdjw5QTRjcKrdm29l9h2PP8VWh2ZYBrATwxoSJqxXEvZMPzkz9ANqUUyDkl8f30mFaQmBfY3KUldDxN8ddZ1nuQIpn/B2rrymRoiPRJ+Etf35gRaYcA7qrsEkOAQg3ltvBO2SkzyCnWHOBFVtSvTkwzDJ0WY3ttHJ/Rw6N3du3qzaMTaVtC5A2Flh3H7QGLF1EbCk2iSvoa3+qIdQQiE4LFM0yKYKZQBC6Wojx3BVF+f9lhyMNiXDj4gUnVSwB8zZFx4Calb2I1JJkF8dupWM1kYHhzOgRHD9QEMHZkhtcYkwk+4Qaw84x8ShI52WvfSqk/yJt+e9gOkyAeS5yUSz5FGOdgMLWyr63jhtfaSXj1UomiDV7ibMuIFMYcrBIkXn8qxfdt1AGiGehOiwr+eSG7luCrJlboY2I2+gSLYNH+MbBkIMS+WnNlfnyMCaFsEJey7HWfTaUQ8/wjeHtWYwm/A=
+before_install:
+  - docker build -t leomont31ro/complains-ms .
 deploy:
   provider: script
   script: docker push leomont31ro/complains-ms
