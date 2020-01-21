@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start:dev": "npx pm2 start app.js --watch --no-daemon",
+    "start:dev": "node app.js",
     "start": "npx pm2-runtime app.js",
     "test": "npx nyc mocha **/*.spec.js --exit --timeout 9999",
     "test:report": "npx nyc report --reporter=text-lcov | npx coveralls"

@@ -29,7 +29,7 @@ class ComplainController {
     try {
       const result = await service.findById(_id);
       if (!result) {
-        throw new Error(`Complain not found with id:${_id}`);
+        return next(Error(`Complain not found with id:${_id}`));
       }
       res.send(200, result);
     } catch (err) {
@@ -44,14 +44,8 @@ class ComplainController {
    * @param {Next} next
    */
   static async list(req, res, next) {
-    const { limit, offset, query, sort } = req.query;
     try {
-      const result = await service.list({
-        limit,
-        offset,
-        query,
-        sort
-      });
+      const result = await service.list(req.query || {});
       res.send(200, result);
     } catch (err) {
       next(err);

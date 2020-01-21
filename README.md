@@ -63,3 +63,18 @@ npm test
 ```bash
 npm start
 ```
+
+### 5) Create a new complain (local environment)
+
+```bash
+curl -X POST \
+  http://localhost:3000 \
+  -H 'Content-Type: application/json' \
+  -d '{
+	"title": "Complain #1",
+	"description": "Complain near to Sao Paulo",
+	"latitude": -23.6105101,
+	"longitude": -46.637934,
+	"company": "12345"
+}'
+```

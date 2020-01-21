@@ -7,16 +7,11 @@ class ComplainDAL {
    * @param {string} uri
    * @param {MongoClientOptions} options
    */
-  constructor(uri, options) {
-    this.uri = uri;
-    this.options = options;
-  }
-
-  /**
-   * @returns {Promise<Db>}
-   */
-  get db() {
-    this.cli = new MongoClient(this.uri, this.options);
+  constructor(uri) {
+    this.cli = MongoClient.connect(uri, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true
+    });
 
     process.on('SIGINT', () => {
       this.cli.close();
@@ -25,10 +20,28 @@ class ComplainDAL {
     process.on('SIGTERM', () => {
       this.cli.close();
     });
+  }
 
-    return this.cli.connect().then(() => {
-      return this.cli.db(process.env.DB_NAME);
-    });
+  /**
+   * @returns {Promise<Db>}
+   */
+  async db() {
+    if (!this.cli) {
+      this.cli = await MongoClient.connect(uri, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true
+      });
+
+      process.on('SIGINT', () => {
+        this.cli.close();
+      });
+
+      process.on('SIGTERM', () => {
+        this.cli.close();
+      });
+    }
+    const conn = await this.cli;
+    return conn.db(process.env.DB_NAME);
   }
 
   /**
@@ -36,7 +49,7 @@ class ComplainDAL {
    * @param {any} inputComplain
    */
   async create(inputComplain) {
-    const db = await this.db;
+    const db = await this.db();
     inputComplain.createdAt = new Date();
     inputComplain.updatedAt = new Date();
     const { insertedId } = await db.collection(COLLECTION_NAME).insertOne(inputComplain);
@@ -49,7 +62,7 @@ class ComplainDAL {
    * @param {string} _id
    */
   async findById(_id) {
-    const db = await this.db;
+    const db = await this.db();
     const result = await db.collection(COLLECTION_NAME).findOne({ _id: ObjectId(_id) });
     return result;
   }
@@ -58,28 +71,28 @@ class ComplainDAL {
    *
    * @param {any} param0
    */
-  async list({ limit = 25, offset = 0, query = {}, sort = {} }) {
-    const db = await this.db;
-    if (query.latitude && query.longitude) {
-      query.location = {
+  async list({ size = 25, page = 0, filters = {}, sort = {} }) {
+    const db = await this.db();
+    if (filters.latitude && filters.longitude) {
+      filters.location = {
         $geoWithin: {
-          $centerSphere: [[query.longitude, query.latitude], (query.radius || 5) / 3963.2]
+          $centerSphere: [[filters.longitude, filters.latitude], (filters.radius || 5) / 3963.2]
         }
       };
-      delete query.latitude;
-      delete query.longitude;
-      delete query.radius;
+      delete filters.latitude;
+      delete filters.longitude;
+      delete filters.radius;
     }
-    if (query.title) {
-      query.title = new RegExp(query.title, 'gi');
+    if (filters.title) {
+      filters.title = new RegExp(filters.title, 'gi');
     }
-    const count = await db.collection(COLLECTION_NAME).countDocuments(query);
+    const count = await db.collection(COLLECTION_NAME).countDocuments(filters);
     const records = await db
       .collection(COLLECTION_NAME)
-      .find(query)
+      .find(filters)
       .sort(sort)
-      .limit(limit)
-      .skip(offset)
+      .limit(size)
+      .skip(page)
       .toArray();
     return { count, records };
   }
@@ -89,7 +102,7 @@ class ComplainDAL {
    * @param {string} _id
    */
   async remove(_id) {
-    const db = await this.db;
+    const db = await this.db();
     const result = await db.collection(COLLECTION_NAME).findOneAndDelete({
       _id: ObjectId(_id)
     });
@@ -105,7 +118,7 @@ class ComplainDAL {
    * @param {any} inputComplain
    */
   async update(_id, inputComplain) {
-    const db = await this.db;
+    const db = await this.db();
     inputComplain.updatedAt = new Date();
     const result = await db.collection(COLLECTION_NAME).findOneAndUpdate(
       { _id: ObjectId(_id) },
@@ -123,7 +136,4 @@ class ComplainDAL {
   }
 }
 
-module.exports = new ComplainDAL(process.env.DB_URL || 'mongodb://local:dev@127.0.0.1:27017', {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-});
+module.exports = new ComplainDAL(process.env.DB_URL || 'mongodb://local:dev@127.0.0.1:27017');

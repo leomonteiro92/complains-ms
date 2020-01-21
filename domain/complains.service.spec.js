@@ -16,7 +16,7 @@ let conn;
 let db;
 
 before(async () => {
-  conn = new MongoClient(process.env.DB_URL || 'mongodb://127.0.0.1:27017', {
+  conn = new MongoClient(process.env.DB_URL || 'mongodb://local:dev@127.0.0.1:27017', {
     useNewUrlParser: true,
     useUnifiedTopology: true
   });
@@ -129,9 +129,9 @@ describe('List complains', () => {
     await db.collection('complains').insertMany(mockData);
 
     const { count, complains } = await Service.list({
-      limit: 10,
-      offset: 0,
-      query: {
+      size: 10,
+      page: 0,
+      filters: {
         latitude: centerLat,
         longitude: centerLng,
         radius: 1
@@ -174,7 +174,7 @@ describe('List complains', () => {
     await db.collection('complains').insertMany(mockData);
 
     const { count, complains } = await Service.list({
-      query: {
+      filters: {
         title: 'guarulhos'
       }
     });

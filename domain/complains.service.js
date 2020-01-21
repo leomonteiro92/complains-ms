@@ -39,9 +39,9 @@ class ComplainService {
    */
   static async list(options) {
     const schema = Joi.object({
-      limit: Joi.number(),
-      offset: Joi.number(),
-      query: Joi.object({
+      size: Joi.number(),
+      page: Joi.number(),
+      filters: Joi.object({
         company: Joi.string(),
         description: Joi.string(),
         latitude: Joi.number(),
